@@ -1,7 +1,9 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useAnimationFrame } from "framer-motion";
 
-const EmojiCategory = ({ onSelectCategory }) => {
+const EmojiCategory = ({ whenSelectedCat, player }) => {
+  const [category, setCategory] = useState(null);
+
   const emojiCategories = [
     {
       name: "Faces",
@@ -128,29 +130,52 @@ const EmojiCategory = ({ onSelectCategory }) => {
     }
   });
 
-  const scrollItems = [...emojiCategories, ...emojiCategories];
+  const scrollItems = [...emojiCategories, ...emojiCategories]; //duplicated
+  function handleCatSelect(cat) {
+    setCategory(cat.name);
+    if (whenSelectedCat) {
+      whenSelectedCat(cat);
+    }
+  }
 
   return (
-    <div className="relative overflow-hidden w-full py-6 bg-[#1F1F3A] border-t border-[#FF5E7E]">
+    <div className="relative overflow-hidden w-full py-6 bg-[#1F1F3A] border-t border-[#FF5E7E] shadow-inner">
       <div ref={containerRef} className="flex gap-6 w-max">
-        {scrollItems.map((cat, index) => (
-          <button
-            key={index}
-            onClick={() => onSelectCategory(cat)}
-            className="min-w-[220px] cursor-pointer bg-white text-black rounded-2xl px-4 py-4 shadow-md hover:bg-[#FF5E7E] transition-all duration-300 flex flex-col gap-3 items-center"
+        {scrollItems.map((cat, idx) => (
+          <motion.button
+            key={idx}
+            onClick={() => handleCatSelect(cat)}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className={`min-w-[220px] cursor-pointer rounded-2xl px-4 py-4 transition-all duration-300 flex flex-col gap-3 items-center border-2
+    ${
+      category === cat.name
+        ? `text-white ${
+            player === 1
+              ? "bg-[#FF5E7E] border-[#FF5E7E]"
+              : "bg-[#00D2FF] border-[#00D2FF]"
+          }`
+        : "bg-white text-black border-transparent hover:bg-gray-100 hover:border-gray-300"
+    }
+  `}
           >
-            <div className="flex items-center gap-2 text-xl font-semibold">
+            <div className="flex items-center gap-2 text-lg font-semibold">
               <span>{cat.icon}</span>
               <span className="underline">{cat.name}</span>
             </div>
+
             <div className="grid grid-cols-5 gap-2 text-xl">
               {cat.emojis.slice(0, 10).map((item, idx) => (
-                <div key={idx} className="p-2">
+                <motion.div
+                  key={idx}
+                  className="p-1 rounded hover:bg-black/5"
+                  whileHover={{ scale: 1.2, rotate: 10 }}
+                >
                   {item}
-                </div>
+                </motion.div>
               ))}
             </div>
-          </button>
+          </motion.button>
         ))}
       </div>
     </div>
