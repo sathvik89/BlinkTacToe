@@ -10,7 +10,7 @@ const Button = ({ text, pagetonavigate }) => {
       whileHover={{ scale: 1.1, rotate: [-1, 1, -1, 0] }}
       whileTap={{ scale: 0.95 }}
       onClick={() => navigate(`/${pagetonavigate}`)}
-      className="bg-blue-600 text-white px-8 py-3 cursor-pointer rounded-xl shadow-lg hover:shadow-blue-400 transition duration-200 text-lg font-bold tracking-wide"
+      className="bg-[#00D2FF] mt-3.5 text-white px-10 py-3 cursor-pointer rounded-xl drop-shadow-xs hover:shadow-blue-400 transition duration-20 text-lg font-bold"
     >
       {text}
     </motion.button>
