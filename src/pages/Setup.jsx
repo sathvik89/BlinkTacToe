@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import EmojiCategory from "../components/EmojiCategory";
 import RuleBook from "../components/RuleBook";
 import PlayerCard from "../components/PlayerCard";
+import { PlayerContext } from "../context/PlayerContext";
 
 const Setup = () => {
   const navi = useNavigate();
@@ -34,6 +35,9 @@ const Setup = () => {
     player1.category &&
     player2.category &&
     player1.category.name !== player2.category.name;
+
+  const { setPlayer1Context, setPlayer2Context } = useContext(PlayerContext);
+
   const handleStart = () => {
     if (!player1.name.trim()) {
       return setEror("Player 1 name is required!");
@@ -50,7 +54,9 @@ const Setup = () => {
     if (player1.category.name === player2.category.name) {
       return setEror("Both players cannot select the same emoji category!");
     }
-    navi("/gamepage", { state: { player1, player2 } });
+    setPlayer1Context(player1);
+    setPlayer2Context(player2);
+    navi("/gamepage");
   };
 
   return (

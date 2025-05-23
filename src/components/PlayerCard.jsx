@@ -21,14 +21,15 @@ const PlayerCard = ({ player, playerNo, color, setPlayer }) => {
         placeholder="Enter Name"
         value={player.name}
         onChange={(e) => setPlayer({ ...player, name: e.target.value })}
-        className="w-full p-3 rounded-xl text-white text-base outline-none focus:ring-2 ring-[#FFCD38]"
+        className="w-full p-3 rounded-xl text-white text-base outline-none focus:ring-2 ring-[#FFCD38] bg-[#1E1B4B] placeholder-white/60"
       />
 
       {player.category && (
         <p className="mt-4 text-sm bg-white/10 p-2 rounded-md text-center">
           Selected Category:{" "}
           <span className="font-semibold text-yellow-300">
-            {player.category.name}
+            {player.category.name}{" "}
+            {player.category.icon}
           </span>
         </p>
       )}
