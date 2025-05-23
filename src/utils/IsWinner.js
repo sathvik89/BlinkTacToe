@@ -13,13 +13,9 @@ export const checkWinner = (playerEmojis) => {
 
   for (const pattern of possibleWins) {
     const [a, b, c] = pattern;
-    const positions = playerEmojis.map((item) => item.position);
+    const p = playerEmojis.map((item) => item.position);
 
-    if (
-      positions.includes(a) &&
-      positions.includes(b) &&
-      positions.includes(c)
-    ) {
+    if (p.includes(a) && p.includes(b) && p.includes(c)) {
       return { isWinner: true, winningIndices: pattern };
     }
   }
