@@ -11,14 +11,14 @@ const GameControls = ({ handleReset, handleChangePlayers }) => {
     >
       <button
         onClick={handleReset}
-        className="px-6 py-3 bg-[#3D3D6B] rounded-xl font-medium hover:bg-[#4D4D7B] transition-colors"
+        className="cursor-pointer px-6 py-3 bg-[#3D3D6B] rounded-xl font-medium hover:bg-[#4D4D7B] transition-colors"
       >
-        New Game
+        Play Again
       </button>
 
       <button
         onClick={handleChangePlayers}
-        className="px-6 py-3 bg-[#3D3D6B] rounded-xl font-medium hover:bg-[#4D4D7B] transition-colors"
+        className="px-6 cursor-pointer py-3 bg-[#3D3D6B] rounded-xl font-medium hover:bg-[#4D4D7B] transition-colors"
       >
         Change Players
       </button>

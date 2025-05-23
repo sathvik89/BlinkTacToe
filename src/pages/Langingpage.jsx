@@ -60,7 +60,11 @@ const LandingPage = () => {
               ease: "linear",
             }}
           >
-            {["😄", "🎮", "✨", "🦄", "🎲", "🎯", "🚀", "👻", "🌟", "💡"][i % 10]}
+            {
+              ["😄", "🎮", "✨", "🦄", "🎲", "🎯", "🚀", "👻", "🌟", "💡"][
+                i % 10
+              ]
+            }
           </motion.span>
         ))}
       </div>
@@ -81,9 +85,7 @@ const LandingPage = () => {
         <Button pagetonavigate="setup" text="Play Now" />
       </motion.div>
 
-      <motion.div variants={itemVariants} className="z-10 mt-auto w-full">
-        <Footer />
-      </motion.div>
+      
     </motion.div>
   );
 };

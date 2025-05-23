@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { PlayerContext } from "../context/PlayerContext";
@@ -7,23 +8,35 @@ import PlayerBadge from "../components/gamepageComponents/PlayerBadge";
 import PlayerTurnIndicator from "../components/gamepageComponents/PlayerTurnIndicator";
 import { checkWinner } from "../utils/IsWinner";
 import Board from "../components/gamepageComponents/Board";
+import GameControls from "../components/gamepageComponents/GameControls";
+import Footer from "../components/Footer";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30, scale: 0.95 },
+  visible: (i = 1) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      delay: i * 0.15,
+      duration: 0.5,
+      ease: [0.17, 0.67, 0.83, 0.67],
+    },
+  }),
+};
 
 const Gamepage = () => {
   const { player1, player2, currentEmojisetToPlace, resetEmojiSet } =
     useContext(PlayerContext);
-
   const navi = useNavigate();
-
-  // game state
-  const [board, setBoard] = useState(Array(9).fill(null)); //simplified
-  const [currentTurn, setCurrentTurn] = useState(1); // 1 = player1, 2 = player2
+  const [board, setBoard] = useState(Array(9).fill(null));
+  const [currentTurn, setCurrentTurn] = useState(1);
   const [player1Moves, setPlayer1Moves] = useState([]);
   const [player2Moves, setPlayer2Moves] = useState([]);
   const [winner, setWinner] = useState(null);
   const [winningCells, setWinningCells] = useState([]);
   const [showConfetti, setShowConfetti] = useState(false);
 
-  // redirect if setup isn't complete/ when refresh error might come
   useEffect(() => {
     if (!player1?.category || !player2?.category) {
       navi("/setup");
@@ -32,9 +45,7 @@ const Gamepage = () => {
 
   //cell logic
   const handleCellClick = (index) => {
-    if (winner || board[index] !== null) {
-      return;
-    }
+    if (winner || board[index] !== null) return;
 
     const newBoard = [...board];
     const isPlayer1Turn = currentTurn === 1;
@@ -45,11 +56,10 @@ const Gamepage = () => {
     const newMove = {
       emoji: currentEmoji,
       position: index,
-      timestamp: Date.now(), //storing the time so that we cna later compare
+      timestamp: Date.now(),
       player: currentTurn,
     };
 
-    // vanishinng rule
     let updatedMoves;
     if (playerMoves.length >= 3) {
       const sortedMoves = [...playerMoves].sort(
@@ -66,9 +76,7 @@ const Gamepage = () => {
     setBoard(newBoard);
     setPlayerMoves(updatedMoves);
 
-    // Check if win
     const result = checkWinner(updatedMoves);
-    
     if (result.isWinner) {
       setWinner(currentTurn);
       setWinningCells(result.winningIndices);
@@ -76,43 +84,97 @@ const Gamepage = () => {
       return;
     } else {
       setCurrentTurn(currentTurn === 1 ? 2 : 1);
-      resetEmojiSet(); // new_emoji for next move
+      resetEmojiSet();
     }
   };
+  //cell logic ends here //
+
+  function handleResetGame() {
+    setBoard(Array(9).fill(null));
+    setPlayer1Moves([]);
+    setPlayer2Moves([]);
+    setWinner(null);
+    setWinningCells([]);
+    setCurrentTurn(1);
+    setShowConfetti(false);
+    resetEmojiSet();
+  }
+  if (!player1 || !player2) {
+    return null; // or a loader/spinner
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#2C2C54] to-[#1F1F3A] text-white flex flex-col">
+    <motion.div
+      className="min-h-screen bg-gradient-to-b from-[#2C2C54] to-[#1F1F3A] text-white flex flex-col"
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
+      }}
+    >
       {showConfetti && <Confetti />}
       <div className="flex-1 p-4 md:p-8">
-        <div className="max-w-4xl mx-auto">
-          <GameSubHead />
+        <motion.div className="max-w-4xl mx-auto" variants={fadeUp}>
+          <motion.div variants={fadeUp}>
+            <GameSubHead />
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"
+            variants={fadeUp}
+          >
             <PlayerBadge
               player={player1}
               isActive={currentTurn === 1 && !winner}
             />
-            <PlayerTurnIndicator
-              winner={winner}
-              currentPlayer={currentTurn}
-              player1={player1}
-              player2={player2}
-              currentEmoji={currentEmojisetToPlace[currentTurn]}
-            />
+
+            <motion.div variants={fadeUp}>
+              <PlayerTurnIndicator
+                winner={winner}
+                currentPlayer={currentTurn}
+                player1={player1}
+                player2={player2}
+                currentEmoji={currentEmojisetToPlace[currentTurn]}
+              />
+            </motion.div>
+
             <PlayerBadge
               player={player2}
               isActive={currentTurn === 2 && !winner}
             />
-          </div>
-          <Board
-            board={board}
-            handleClick={handleCellClick}
-            winner={winner}
-            winningIndices={winningCells}
-          />
-        </div>
+          </motion.div>
+
+          <motion.div variants={fadeUp}>
+            <Board
+              board={board}
+              handleClick={handleCellClick}
+              winner={winner}
+              winningIndices={winningCells}
+            />
+          </motion.div>
+
+          <motion.div variants={fadeUp}>
+            <GameControls
+              handleReset={handleResetGame}
+              handleChangePlayers={() => navi("/setup")}
+            />
+          </motion.div>
+
+          <motion.div
+            variants={fadeUp}
+            className="mt-8 mb-8 text-center text-sm text-gray-400"
+          >
+            <p>Remember: You can only have 3 emojis on the board at once!</p>
+            <p>When you place a 4th emoji, your oldest one will vanish.</p>
+          </motion.div>
+
+          <motion.div variants={fadeUp}>
+            <Footer />
+          </motion.div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
