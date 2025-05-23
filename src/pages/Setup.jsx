@@ -36,7 +36,8 @@ const Setup = () => {
     player2.category &&
     player1.category.name !== player2.category.name;
 
-  const { setPlayer1Context, setPlayer2Context } = useContext(PlayerContext);
+  const {setPlayer1Context,setPlayer2Context } =
+    useContext(PlayerContext);
 
   const handleStart = () => {
     if (!player1.name.trim()) {
