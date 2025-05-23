@@ -6,12 +6,15 @@ export const PlayerContext = createContext();
 export const PlayerProvider = ({ children }) => {
   const [player1, setPlayer1Context] = useState(null);
   const [player2, setPlayer2Context] = useState(null);
-  const [emojiSet, setEmojiSet] = useState({ 1: null, 2: null });
+  const [currentEmojisetToPlace, setcurrentEmojisetToPlace] = useState({
+    1: null,
+    2: null,
+  });
 
   const assignEmojis = () => {
     const e1 = getRandomEmoji(player1.category.name);
     const e2 = getRandomEmoji(player2.category.name);
-    setEmojiSet({ 1: e1, 2: e2 });
+    setcurrentEmojisetToPlace({ 1: e1, 2: e2 });
   };
 
   useEffect(() => {
@@ -33,7 +36,7 @@ export const PlayerProvider = ({ children }) => {
         setPlayer1Context,
         player2,
         setPlayer2Context,
-        emojiSet,
+        currentEmojisetToPlace,
         resetEmojiSet,
       }}
     >

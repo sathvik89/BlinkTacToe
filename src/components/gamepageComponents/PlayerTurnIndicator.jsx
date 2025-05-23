@@ -15,11 +15,11 @@ const PlayerTurnIndicator = ({
       className="bg-[#3D3D6B] p-4 rounded-xl text-center flex flex-col justify-center"
     >
       {winner ? (
-        <div className="animate-bounce">
+        <div className="animate-none">
           <h2 className="text-xl font-bold mb-2">
             {winner === 1 ? player1.name : player2.name} Wins!
           </h2>
-          <div className="text-5xl">🏆</div>
+          <div className="text-5xl animate-bounce">🏆</div>
         </div>
       ) : (
         <>

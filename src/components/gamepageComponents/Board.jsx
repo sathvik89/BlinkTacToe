@@ -19,7 +19,7 @@ const Board = ({ board, handleClick, winner, winningIndices }) => {
               className={`rounded-xl flex items-center justify-center text-5xl font-bold
                 ${
                   isWinCell //win cell colouring
-                    ? "bg-gradient-to-r from-pink-500/30 to-cyan-400/30"
+                    ? "bg-yellow-200"
                     : "bg-[#3D3D6B]"
                 }
                 ${isClickable ? "hover:bg-[#4D4D7B] cursor-pointer" : ""}
