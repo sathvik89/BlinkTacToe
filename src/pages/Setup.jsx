@@ -6,6 +6,7 @@ import PlayerCard from "../components/PlayerCard";
 import Footer from "../components/Footer";
 import { PlayerContext } from "../context/PlayerContext";
 import { useContext, useState } from "react";
+import BackButton from "../components/BackButton";
 
 const Setup = () => {
   const navi = useNavigate();
@@ -116,7 +117,9 @@ const Setup = () => {
             {eror}
           </motion.div>
         )}
-
+        <div>
+          <BackButton />
+        </div>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -132,7 +135,7 @@ const Setup = () => {
                 : "bg-gray-600 cursor-not-allowed opacity-60"
             }`}
           >
-            🚀 Start Game!
+            Start Game!
           </button>
         </motion.div>
       </div>

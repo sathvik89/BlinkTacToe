@@ -1,7 +1,7 @@
 import React from "react";
 import Heading from "../components/Heading";
 import Button from "../components/Button";
-import Footer from "../components/Footer";
+// import Footer from "../components/Footer";
 import { motion } from "framer-motion";
 
 const containerVariants = {
@@ -10,22 +10,37 @@ const containerVariants = {
     opacity: 1,
     transition: {
       when: "beforeChildren",
-      staggerChildren: 0.3,
-      duration: 1,
+      staggerChildren: 0.25,
+      duration: 0.8,
+      ease: "easeOut",
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 50, scale: 0.95 },
+  hidden: { opacity: 0, y: 60, scale: 0.9 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
       type: "spring",
-      stiffness: 90,
-      damping: 10,
+      stiffness: 80,
+      damping: 12,
+      mass: 0.8,
+    },
+  },
+};
+
+const emojiVariants = {
+  animate: {
+    y: [-10, -14, -10],
+    rotate: [-5, 5, -5],
+    opacity: [0.2, 0.6, 0.2],
+    transition: {
+      duration: 6,
+      repeat: Infinity,
+      ease: "easeInOut",
     },
   },
 };
@@ -36,29 +51,22 @@ const LandingPage = () => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="relative flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-purple-900 to-[#1E90FF] text-white px-6 py-12 overflow-hidden"
+      className="relative flex flex-col justify-center items-center min-h-screen bg-[#0F172A] text-white px-4 py-10 sm:px-6 md:px-10 overflow-hidden"
     >
-      {/* Animated Floating Emojis */}
+      {/* Floating Emojis */}
       <div className="absolute inset-0 pointer-events-none">
         {[...Array(10)].map((_, i) => (
           <motion.span
             key={i}
-            className="absolute text-4xl select-none opacity-30"
+            className="absolute select-none"
             style={{
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
-              fontSize: `${Math.random() * 20 + 20}px`,
+              fontSize: `${Math.random() * 18 + 24}px`,
+              opacity: 0.2,
             }}
-            animate={{
-              y: [-10, -30],
-              opacity: [0.3, 0.8, 0.3],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: Math.random() * 5 + 5,
-              repeat: Infinity,
-              ease: "linear",
-            }}
+            variants={emojiVariants}
+            animate="animate"
           >
             {
               ["😄", "🎮", "✨", "🦄", "🎲", "🎯", "🚀", "👻", "🌟", "💡"][
@@ -69,23 +77,20 @@ const LandingPage = () => {
         ))}
       </div>
 
-      {/* Content */}
       <motion.div variants={itemVariants} className="z-10 mt-6 text-center">
         <Heading text="Blink Tac Toe" />
       </motion.div>
 
       <motion.div
         variants={itemVariants}
-        className="z-10 mt-6 text-xl md:text-2xl text-[#FFC371] font-semibold text-center"
+        className="z-10 mt-4 text-lg sm:text-xl md:text-2xl text-[#FACC15] font-semibold text-center"
       >
-        <h2>A Fun emoji twist on the classic game!</h2>
+        <h2>A fun emoji twist on the classic game!</h2>
       </motion.div>
 
       <motion.div variants={itemVariants} className="z-10 mt-10">
         <Button pagetonavigate="setup" text="Play Now" />
       </motion.div>
-
-      
     </motion.div>
   );
 };

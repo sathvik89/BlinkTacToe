@@ -100,9 +100,9 @@ const Gamepage = () => {
     resetEmojiSet();
   }
   if (!player1 || !player2) {
-    return null; // or a loader/spinner
+    return null; 
   }
-
+    
   return (
     <motion.div
       className="min-h-screen bg-gradient-to-b from-[#2C2C54] to-[#1F1F3A] text-white flex flex-col"
