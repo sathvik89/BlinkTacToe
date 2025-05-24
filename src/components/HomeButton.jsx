@@ -16,7 +16,7 @@ export default function HomeButton() {
   return (
     <button
       onClick={handleHomeClick}
-      className="w-12 h-12 absolute top-4 right-22 rounded-full border border-purple-300/60 bg-white/10 backdrop-blur-md shadow-md flex items-center justify-center text-white hover:scale-105 transition duration-200"
+      className="w-12 h-12 absolute cursor-pointer top-4 right-22 rounded-full border border-purple-300/60 bg-white/10 backdrop-blur-md shadow-md flex items-center justify-center text-white hover:scale-105 transition duration-200"
       aria-label="Go to Home"
     >
       <AiFillHome className="text-xl" />

@@ -56,7 +56,7 @@ const AppMusic = () => {
 
       <button
         onClick={toggleControls}
-        className="w-12 h-12 rounded-full border border-purple-300/60 bg-white/10 backdrop-blur-md shadow-md flex items-center justify-center text-white hover:scale-105 transition duration-200"
+        className="w-12 h-12 rounded-full cursor-pointer border border-purple-300/60 bg-white/10 backdrop-blur-md shadow-md flex items-center justify-center text-white hover:scale-105 transition duration-200"
       >
         {getIcon()}
       </button>

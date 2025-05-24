@@ -138,8 +138,10 @@ const Gamepage = () => {
         visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
       }}
     >
-      <AppMusic />
-      <HomeButton />
+      <div className="mb-10">
+        <AppMusic />
+        <HomeButton />
+      </div>
       {showConfetti && <Confetti />}
       <div className="flex-1 p-4 md:p-8">
         <motion.div className="max-w-4xl mx-auto" variants={fadeUp}>
