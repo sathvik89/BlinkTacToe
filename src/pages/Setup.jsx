@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import { PlayerContext } from "../context/PlayerContext";
 import { useContext, useState, useRef, useEffect } from "react";
 import BackButton from "../components/BackButton";
+import bgImage from "../backgroundImages/background.png";
 
 const Setup = () => {
   const navi = useNavigate();
@@ -43,8 +44,8 @@ const Setup = () => {
   };
 
   const canStart =
-    player1.name.trim() &&
-    player2.name.trim() &&
+    player1.name &&
+    player2.name &&
     player1.category &&
     player2.category &&
     player1.category.name !== player2.category.name;
@@ -52,27 +53,40 @@ const Setup = () => {
   const { setPlayer1Context, setPlayer2Context } = useContext(PlayerContext);
 
   const handleStart = () => {
-    if (!player1.name.trim()) return setEror("Player 1 name is required!");
-    if (!player2.name.trim()) return setEror("Player 2 name is required!");
-    if (!player1.category)
+    if (!player1.name.trim()) {
+      return setEror("Player 1 name is required!");
+    }
+    if (!player2.name.trim()) {
+      return setEror("Player 2 name is required!");
+    }
+    if (!player1.category) {
       return setEror("Player 1 must select an emoji category!");
-    if (!player2.category)
+    }
+
+    if (!player2.category) {
       return setEror("Player 2 must select an emoji category!");
-    if (player1.category.name === player2.category.name)
+    }
+
+    if (player1.category.name === player2.category.name) {
       return setEror("Both players cannot select the same emoji category!");
+    }
+
     setPlayer1Context(player1);
     setPlayer2Context(player2);
     navi("/gamepage");
   };
 
   return (
-    <div className="relative min-h-screen px-4 py-10 bg-gradient-to-br from-[#1E1B4B] to-[#100F2C] text-white overflow-hidden">
+    <div
+      style={{ backgroundImage: `url(${bgImage})` }}
+      className="relative min-h-screen bg-cover bg-top px-4 md:px-8 py-10 md:py-20 overflow-hidden"
+    >
       <div className="relative z-10 max-w-7xl mx-auto">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-4xl md:text-6xl font-extrabold text-center mb-10 text-transparent bg-clip-text bg-gradient-to-r from-[#FF5E7E] via-[#FFCD38] to-[#00D2FF] drop-shadow-lg"
+          className="text-4xl md:text-6xl  font-extrabold text-center mb-10 text-transparent bg-clip-text bg-gradient-to-r from-[#FF5E7E] via-[#FFCD38] to-[#00D2FF] drop-shadow-lg"
         >
           Setup Your Game
         </motion.h1>
@@ -106,7 +120,7 @@ const Setup = () => {
         >
           <div className="bg-[#2B2B60] p-6 rounded-2xl border border-pink-400/30 shadow-md hover:shadow-pink-500/30 transition-all duration-300">
             <h2 className="text-xl font-bold mb-4 text-center text-[#FF8FA3] drop-shadow-md">
-              🎭 Player 1 Emoji Category
+              Player 1 Emoji Category
             </h2>
             <EmojiCategory
               player={1}
@@ -115,7 +129,7 @@ const Setup = () => {
           </div>
           <div className="bg-[#2B2B60] p-6 rounded-2xl border border-cyan-400/30 shadow-md hover:shadow-cyan-500/30 transition-all duration-300">
             <h2 className="text-xl font-bold mb-4 text-center text-[#7DE4FF] drop-shadow-md">
-              🧙‍♂️ Player 2 Emoji Category
+              Player 2 Emoji Category
             </h2>
             <EmojiCategory
               player={2}
@@ -158,7 +172,7 @@ const Setup = () => {
             disabled={!canStart}
             className={`px-10 py-3 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg tracking-wide ${
               canStart
-                ? "bg-gradient-to-r from-[#FF5E7E] to-[#FFC371] hover:scale-105 hover:shadow-pink-300"
+                ? "bg-emerald-400 hover:scale-105 cursor-pointer"
                 : "bg-gray-600 cursor-not-allowed opacity-60"
             }`}
           >

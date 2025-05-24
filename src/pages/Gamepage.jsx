@@ -10,6 +10,7 @@ import { checkWinner } from "../utils/IsWinner";
 import Board from "../components/gamepageComponents/Board";
 import GameControls from "../components/gamepageComponents/GameControls";
 import Footer from "../components/Footer";
+import bgImage from "../backgroundImages/background.png";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30, scale: 0.95 },
@@ -100,12 +101,14 @@ const Gamepage = () => {
     resetEmojiSet();
   }
   if (!player1 || !player2) {
-    return null; 
+    return null;
   }
-    
+
   return (
     <motion.div
-      className="min-h-screen bg-gradient-to-b from-[#2C2C54] to-[#1F1F3A] text-white flex flex-col"
+      style={{ backgroundImage: `url(${bgImage})` }}
+      className="relative min-h-screen bg-cover bg-top px-4 md:px-8 py-10 md:py-20 overflow-hidden"
+      // className="min-h-screen bg-gradient-to-b from-[#2C2C54] to-[#1F1F3A] text-white flex flex-col"
       initial="hidden"
       animate="visible"
       variants={{

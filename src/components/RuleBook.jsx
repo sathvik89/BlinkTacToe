@@ -44,9 +44,9 @@ const RuleBook = () => {
       >
         <button
           onClick={() => setShow(true)}
-          className="px-5 py-2 rounded-full font-semibold bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md hover:shadow-lg transition-all duration-300"
+          className="px-5 py-2 rounded-2xl font-semibold bg-teal-500 hover:scale-105 shadow-md hover:shadow-lg transition-all duration-300"
         >
-          Show Rules 📘
+          Show Rules
         </button>
       </div>
 
