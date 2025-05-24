@@ -12,6 +12,7 @@ import bgImage from "../backgroundImages/background.png";
 import FloatingEmoji from "../components/FloatingEmoji";
 import StartButton from "../components/StartButton";
 import ClickSound from "../audio/Click.mp3";
+import SetupHeading from "../components/SetupHeading";
 
 const Setup = () => {
   const navi = useNavigate();
@@ -20,12 +21,12 @@ const Setup = () => {
   const [eror, setEror] = useState("");
 
   const emojiSectionRef = useRef(null);
-  const scrollToEmojis = () => {
+  const scrollToEmojisSection = () => {
     emojiSectionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
-    const timeout = setTimeout(scrollToEmojis, 1500);
+    const timeout = setTimeout(scrollToEmojisSection, 1500);
     return () => clearTimeout(timeout);
   }, []);
 
@@ -84,14 +85,7 @@ const Setup = () => {
         <AppMusic />
       </div>
       <div className="relative z-10 max-w-7xl mx-auto">
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-4xl md:text-6xl  font-extrabold text-center mb-10 text-transparent bg-clip-text bg-gradient-to-r from-[#FF5E7E] via-[#FFCD38] to-[#00D2FF] drop-shadow-lg"
-        >
-          Setup Your Game
-        </motion.h1>
+        <SetupHeading />
         <FloatingEmoji />
         <div className="flex flex-col justify-center">
           <motion.div

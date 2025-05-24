@@ -4,7 +4,7 @@ import appMusic from "../audio/appmusic.mp3";
 
 const AppMusic = () => {
   const musicRef = useRef(new Audio(appMusic));
-  const [soundPlay, setSoundPlay] = useState(false);
+  const [soundPlay, setSoundPlay] = useState(true);
   const [volume, setVolume] = useState(0.5);
 
   useEffect(() => {

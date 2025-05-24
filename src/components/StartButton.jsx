@@ -3,7 +3,7 @@ const StartButton = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="px-10 py-3 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg tracking-wide bg-emerald-400 hover:scale-105 cursor-pointer"
+      className="cursor-pointer px-6 py-3 bg-[#4CAF50] transition-all duration-300 shadow-lg text-white rounded-xl font-medium hover:bg-[#8BC34A] hover:scale-105 "
     >
       Start Game!
     </button>

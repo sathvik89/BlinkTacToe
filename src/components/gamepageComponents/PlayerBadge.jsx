@@ -5,7 +5,7 @@ const PlayerBadge = ({ player, isActive, score }) => {
   return (
     <motion.div
       className={`flex items-center gap-3 px-4 py-2 rounded-xl shadow-lg transition-all duration-300 
-        ${isActive ? "bg-yellow-500 text-black" : "bg-white/10 text-white"}`}
+        ${isActive ? "bg-yellow-300 text-black" : "bg-white/10 text-white"}`}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
     >
