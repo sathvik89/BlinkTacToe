@@ -8,7 +8,7 @@ const Button = ({ text, pagetonavigate }) => {
   const navigate = useNavigate();
   function handleClick() {
     navigate(`/${pagetonavigate}`);
-    clickSound1.current.currentTime = 0; // Rewind to start
+    clickSound1.current.currentTime = 0; // rewind to start
     clickSound1.current.play();
   }
 

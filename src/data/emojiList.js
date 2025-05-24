@@ -1,3 +1,6 @@
+// List of emoji categories used for assigning random emojis to players
+// after they select a category during setup. Each category has a name and a set of related emojis.
+
 const emojiList = [
   {
     name: "Faces",

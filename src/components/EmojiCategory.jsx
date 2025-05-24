@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { motion, useAnimationFrame } from "framer-motion";
 
 const emojiCategories = [
+  //all the emoji categories listed
   {
     name: "Faces",
     icon: "😄",
@@ -81,17 +82,19 @@ const EmojiCategory = ({ whenSelectedCat }) => {
   });
 
   const scrollItems = [...emojiCategories, ...emojiCategories];
-
+  // update selected category and notify parent (when the callback provided)
   const handleSelect = (cat) => {
     setSelectedCategory(cat);
-    if (whenSelectedCat) whenSelectedCat(cat);
+    if (whenSelectedCat) {
+      whenSelectedCat(cat);
+    }
   };
 
   const clickTap = { scale: 0.9, rotate: -5 };
 
   return (
     <div className="w-full py-2 px-3 sm:px-6 md:px-12 lg:px-20 flex flex-col items-center gap-5">
-      {/* Scrolling categories */}
+      {/* Scrolling categories section  */}
       <div className="relative w-full overflow-hidden p2">
         <div
           ref={scrollRef}
@@ -119,7 +122,7 @@ const EmojiCategory = ({ whenSelectedCat }) => {
         </div>
       </div>
 
-      {/* Emoji grid for selected category */}
+      {/*showcasing emoji grid for selected category */}
       {selectedCategory && (
         <motion.div
           initial={{ opacity: 0, y: 15 }}

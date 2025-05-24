@@ -2,31 +2,17 @@ import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RxCross2 } from "react-icons/rx";
 import ClickSound from "../audio/Click.mp3";
+import Section from "../components/SectionRulebook";
 
 const RuleBook = () => {
+
+  //setting sound effect
   const clickSound1 = useRef(new Audio(ClickSound));
   const [show, setShow] = useState(false);
-
   const playClick = () => {
     clickSound1.current.currentTime = 0;
     clickSound1.current.play();
   };
-
-  const Section = ({ number, title, children }) => (
-    <div className="mt-6">
-      <div className="flex items-center gap-3">
-        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-pink-400 text-white text-xs font-bold">
-          {number}
-        </div>
-        <h3 className="font-semibold text-[#B3BFFA] text-base sm:text-lg">
-          {title}
-        </h3>
-      </div>
-      <div className="mt-2 text-sm text-white/90 space-y-1 pl-9">
-        {children}
-      </div>
-    </div>
-  );
 
   return (
     <>
@@ -45,7 +31,8 @@ const RuleBook = () => {
           Show Rules
         </button>
       </div>
-
+      
+      {/* rules */}
       <AnimatePresence>
         {show && (
           <motion.div

@@ -9,6 +9,7 @@ const PlayerCard = ({ player, playerNo, setPlayer }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
+      {/* player 1 or 2 */}
       <h2 className="text-lg sm:text-xl font-medium mb-2 text-fuchsia-300">
         {playerNo}
       </h2>
@@ -20,7 +21,7 @@ const PlayerCard = ({ player, playerNo, setPlayer }) => {
         onChange={(e) => setPlayer({ ...player, name: e.target.value })}
         className="bg-transparent border-b border-fuchsia-400 text-white placeholder-white/50 px-2 py-1 text-base focus:outline-none focus:border-yellow-300 transition-all duration-300 mb-3 w-full text-center"
       />
-
+      {/* showing the category player selected */}
       <p className="text-sm sm:text-base text-white/80">
         Category:{" "}
         {player.category ? (
