@@ -3,59 +3,60 @@ import { FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import appMusic from "../audio/appmusic.mp3";
 
 const AppMusic = () => {
-  const musicRef = useRef(new Audio(appMusic));
-  const [soundPlay, setSoundPlay] = useState(true);
+  const audioRef = useRef(new Audio(appMusic));
+  const [isPlaying, setIsPlaying] = useState(true);
   const [volume, setVolume] = useState(0.5);
+  const [showControls, setShowControls] = useState(false);
 
   useEffect(() => {
-    const music = musicRef.current;
-    music.loop = true;
-    music.volume = volume;
-    music.play();
+    const audio = audioRef.current;
+    audio.loop = true;
+    audio.volume = volume;
+    audio.play();
 
     return () => {
-      music.pause();
+      audio.pause();
     };
   }, []);
 
   useEffect(() => {
-    musicRef.current.volume = volume;
+    audioRef.current.volume = volume;
   }, [volume]);
 
-  const toggleMusic = () => {
-    const music = musicRef.current;
-    if (soundPlay) {
-      music.pause();
-    } else {
-      music.play();
+  const handleToggleControls = () => {
+    setShowControls((prev) => !prev);
+  };
+
+  const getIcon = () => {
+    if (volume === 0 || !isPlaying) {
+      return <FaVolumeMute className="text-xl" />;
     }
-    setSoundPlay(!soundPlay);
+    return <FaVolumeUp className="text-xl" />;
   };
 
   return (
-    <div className="absolute top-4 right-4 z-50 group">
-      <div className="flex flex-row items-center gap-2 bg-white/10 backdrop-blur-md p-2 rounded-xl shadow-md w-12 hover:w-32 transition-all duration-300 ease-in-out overflow-hidden group-hover:w-32">
-        <button
-          onClick={toggleMusic}
-          className="hover:scale-110 transition-transform duration-200"
-        >
-          {soundPlay ? (
-            <FaVolumeUp className="text-white text-xl" />
-          ) : (
-            <FaVolumeMute className="text-white text-xl" />
-          )}
-        </button>
-
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={volume}
-          onChange={(e) => setVolume(parseFloat(e.target.value))}
-          className="w-full accent-pink-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        />
-      </div>
+    <div className="absolute top-4 right-4 z-50 flex flex-col items-center gap-2">
+      {/* volume button */}
+      <button
+        onClick={handleToggleControls}
+        className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md shadow-md flex items-center justify-center text-white hover:scale-105 transition duration-200"
+      >
+        {getIcon()}
+      </button>
+      {/* volume controller */}
+      {showControls && (
+        <div className="flex flex-col items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-2 rounded-xl shadow-lg">
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={volume}
+            onChange={(e) => setVolume(parseFloat(e.target.value))}
+            className="w-28 accent-pink-400"
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -8,7 +8,7 @@ const SetupHeading = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-4xl md:text-6xl font-extrabold text-center text-[#aab7f9] drop-shadow-lg"
+        className="text-4xl md:text-6xl font-serif font-extrabold text-center text-[#aab7f9] drop-shadow-lg"
       >
         Setup Your Game
       </motion.h1>

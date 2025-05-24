@@ -139,7 +139,7 @@ const EmojiCategory = ({ whenSelectedCat, player }) => {
   }
 
   return (
-    <div className="relative overflow-hidden w-full py-6 bg-[#1F1F3A] border-t border-[#FF5E7E] shadow-inner">
+    <div className="relative overflow-hidden w-full py-6 ">
       <div ref={containerRef} className="flex gap-6 w-max">
         {scrollItems.map((cat, idx) => (
           <motion.button

@@ -1,40 +1,26 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { RxCross2 } from "react-icons/rx";
 import ClickSound from "../audio/Click.mp3";
 
 const RuleBook = () => {
   const clickSound1 = useRef(new Audio(ClickSound));
   const [show, setShow] = useState(false);
-  const rulesRef = useRef();
 
-  function closeRules() {
+  const playClick = () => {
     clickSound1.current.currentTime = 0;
     clickSound1.current.play();
-    setShow(false);
-  }
+  };
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (rulesRef.current && !rulesRef.current.contains(e.target)) {
-        closeRules();
-      }
-    };
-    if (show) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [show]);
-
-  //layout
-  const Section = ({ number, color, title, children }) => (
+  const Section = ({ number, title, children }) => (
     <div className="mt-6">
       <div className="flex items-center gap-3">
-        <div
-          className={`w-6 h-6 flex items-center justify-center rounded-full text-white text-xs font-bold ${color}`}
-        >
+        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-pink-400 text-white text-xs font-bold">
           {number}
         </div>
-        <h3 className="font-bold text-lg text-gray-100">{title}</h3>
+        <h3 className="font-semibold text-[#B3BFFA] text-base sm:text-lg">
+          {title}
+        </h3>
       </div>
       <div className="mt-2 text-sm text-white/90 space-y-1 pl-9">
         {children}
@@ -42,22 +28,19 @@ const RuleBook = () => {
     </div>
   );
 
-  function openRules() {
-    clickSound1.current.currentTime = 0;
-    clickSound1.current.play();
-    setShow(true);
-  }
-
   return (
     <>
       <div
-        className={`relative transition-all duration-300 ${
-          show ? "blur-lg pointer-events-none select-none" : ""
-        }`}
+        className={`${
+          show ? "blur-sm pointer-events-none select-none" : ""
+        } transition-all duration-300`}
       >
         <button
-          onClick={openRules}
-          className="px-5 py-2 cursor-pointer rounded-2xl font-semibold bg-teal-500 hover:scale-105 shadow-md hover:shadow-lg transition-all duration-300"
+          onClick={() => {
+            playClick();
+            setShow(true);
+          }}
+          className="px-5 py-2 rounded-xl font-semibold bg-[#6C5CE7] text-white hover:bg-[#8E44AD] hover:scale-105 transition-all shadow-md"
         >
           Show Rules
         </button>
@@ -66,67 +49,64 @@ const RuleBook = () => {
       <AnimatePresence>
         {show && (
           <motion.div
-            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+            className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center px-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.div
-              ref={rulesRef}
-              className="relative w-full max-w-xl mx-4 p-6 rounded-2xl border border-white/10 bg-white/10 shadow-xl backdrop-blur-xl text-white"
-              initial={{ scale: 0.8, opacity: 0 }}
+              className="relative w-full max-w-md sm:max-w-lg bg-[#1A1A2E] text-white p-5 sm:p-6 rounded-2xl shadow-2xl border border-white/10 backdrop-blur-xl"
+              initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              exit={{ scale: 0.85, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 22 }}
             >
               <button
-                onClick={closeRules}
-                className="absolute top-3 cursor-pointer right-3 text-white text-lg hover:text-red-400 transition"
+                onClick={() => {
+                  playClick();
+                  setShow(false);
+                }}
+                className="absolute top-3 right-3 text-white hover:text-pink-400 transition"
               >
-                ❌
+                <RxCross2 size={22} />
               </button>
 
-              <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 mb-5 text-center">
                 How to Play Blink Tac Toe
               </h2>
 
-              <Section number="1" color="bg-blue-500" title="Game Setup">
+              <Section number="1" title="Game Setup">
                 <p>
-                  • Each player picks an emoji category (Animals, Food, Sports,
-                  etc.)
+                  • Each player selects an emoji category (Animals, Food,
+                  Sports, etc.)
                 </p>
                 <p>• The game is played on a classic 3x3 grid</p>
                 <p>• Players take turns placing their chosen emojis</p>
               </Section>
 
-              <Section
-                number="2"
-                color="bg-green-500"
-                title="The Vanishing Rule"
-              >
-                <p>• You're only allowed 3 emojis on the board at once</p>
-                <p>• Placing a 4th will make your oldest emoji disappear</p>
-                <p>• This twist keeps the game active and unpredictable</p>
+              <Section number="2" title="The Vanishing Rule">
+                <p>• You can only have 3 emojis on the board at any time</p>
+                <p>• Placing a 4th will remove your oldest emoji</p>
+                <p>• Adds unpredictability and strategy</p>
               </Section>
 
-              <Section number="3" color="bg-orange-500" title="How to Win">
+              <Section number="3" title="How to Win">
                 <p>
-                  • Line up 3 of your own emojis in a row—horizontally,
-                  vertically, or diagonally
+                  • Align 3 of your own emojis in a row (horizontal, vertical,
+                  or diagonal)
                 </p>
-                <p>• Only your emojis count—no mixing with the opponent's</p>
-                <p>• First to do it takes the win!</p>
+                <p>• Only your own emojis count—no mixing!</p>
+                <p>• First to succeed wins the game</p>
               </Section>
 
-              <Section number="4" color="bg-purple-500" title="Strategy Tips">
-                <p>• Think ahead—your oldest emoji won't stick around</p>
-                <p>• Block your opponent while setting up your own win</p>
-                <p>• Use the vanishing rule to force creative plays</p>
+              <Section number="4" title="Strategy Tips">
+                <p>• Think ahead—your oldest emoji won't stay</p>
+                <p>• Block your opponent while planning your own moves</p>
+                <p>• Use the vanish rule to force creative plays</p>
               </Section>
 
-              <div className="mt-8 bg-white/10 text-center p-4 rounded-xl text-sm">
-                🎮 <strong>Ready to play?</strong> Have fun and may the best
-                emoji army win!
+              <div className="mt-6 sm:mt-8 bg-white/5 text-center p-3 rounded-lg text-sm text-[#B3BFFA]">
+                🎮 <strong>Ready to play?</strong> May the best emoji army win!
               </div>
             </motion.div>
           </motion.div>

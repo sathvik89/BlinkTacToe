@@ -13,6 +13,7 @@ import Footer from "../components/Footer";
 import bgImage from "../backgroundImages/background.png";
 import clickSound from "../audio/Click.mp3";
 import AppMusic from "../components/AppMusic";
+import winnerSound from "../audio/winner.mp3";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30, scale: 0.95 },
@@ -43,6 +44,17 @@ const Gamepage = () => {
   const [winningCells, setWinningCells] = useState([]);
   const [showConfetti, setShowConfetti] = useState(false);
 
+  const winnerMusicc = useRef(new Audio(winnerSound));
+  useEffect(() => {
+    if (winner) {
+      winnerMusicc.current.currentTime = 0;
+      winnerMusicc.current.play();
+      const id = setTimeout(() => {
+        winnerMusicc.current.pause();
+      }, 5000);
+      return () => clearTimeout(id);
+    }
+  }, [winner]);
   useEffect(() => {
     if (!player1?.category || !player2?.category) {
       navi("/setup");
