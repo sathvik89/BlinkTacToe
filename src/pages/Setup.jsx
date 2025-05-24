@@ -92,10 +92,12 @@ const Setup = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="text-white text-center text-lg font-medium my-6 bg-black/20 backdrop-blur-sm px-4 py-2 rounded-4xl w-fit mx-auto shadow-md"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
+            className="text-white text-center text-lg font-semibold my-6 bg-black/30 backdrop-blur-md px-6 py-3 rounded-full w-max mx-auto shadow-lg shadow-black/50 select-none"
+            role="banner"
+            aria-label="Instruction to choose emoji sets"
           >
             Choose your emoji sets
           </motion.div>
@@ -106,24 +108,37 @@ const Setup = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12"
           >
-            <div className="bg-[#2B2B60] p-6 rounded-2xl border border-pink-400/30 shadow-md hover:shadow-pink-500/30 transition-all duration-300">
-              <h2 className="text-xl font-bold mb-4 text-center text-[#FF8FA3] drop-shadow-md">
-                Player 1 Emoji Category
-              </h2>
-              <EmojiCategory
-                player={1}
-                whenSelectedCat={(category) => handleSelectCat(1, category)}
-              />
-            </div>
-            <div className="bg-[#2B2B60] p-6 rounded-2xl border border-cyan-400/30 shadow-md hover:shadow-cyan-500/30 transition-all duration-300">
-              <h2 className="text-xl font-bold mb-4 text-center text-[#7DE4FF] drop-shadow-md">
-                Player 2 Emoji Category
-              </h2>
-              <EmojiCategory
-                player={2}
-                whenSelectedCat={(category) => handleSelectCat(2, category)}
-              />
-            </div>
+            {[1, 2].map((player) => {
+              const isPlayer1 = player === 1;
+              return (
+                <section
+                  key={player}
+                  aria-labelledby={`player${player}-emoji-category`}
+                  className={`bg-[#2B2B60] p-6 rounded-2xl border 
+          ${
+            isPlayer1
+              ? "border-pink-400/30 shadow-md hover:shadow-pink-500/30"
+              : "border-cyan-400/30 shadow-md hover:shadow-cyan-500/30"
+          } 
+          transition-all duration-300`}
+                >
+                  <h2
+                    id={`player${player}-emoji-category`}
+                    className={`text-xl font-bold mb-4 text-center ${
+                      isPlayer1 ? "text-[#FF8FA3]" : "text-[#7DE4FF]"
+                    } drop-shadow-md`}
+                  >
+                    Player {player} Emoji Category
+                  </h2>
+                  <EmojiCategory
+                    player={player}
+                    whenSelectedCat={(category) =>
+                      handleSelectCat(player, category)
+                    }
+                  />
+                </section>
+              );
+            })}
           </motion.div>
         </div>
 

@@ -1,36 +1,36 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const PlayerCard = ({ player, playerNo,  setPlayer }) => {
+const PlayerCard = ({ player, playerNo, setPlayer }) => {
   return (
     <motion.div
-      className="bg-[#1E1E2F] flex justify-center flex-col rounded-lg px-4 py-4 text-white shadow-xl w-full max-w-md mx-auto border border-white/10"
+      className="text-white text-center w-full max-w-md mx-auto"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div
-        className="text-lg font-light font-serif text-fuchsia-300 text-center  mb-4 px-4 py-2 rounded-md inline-block"
-      >
+      <h2 className="text-lg sm:text-xl font-medium mb-2 text-fuchsia-300">
         {playerNo}
-      </div>
+      </h2>
 
       <input
         type="text"
         placeholder="Enter Name"
         value={player.name}
         onChange={(e) => setPlayer({ ...player, name: e.target.value })}
-        className="w-full p-3 rounded-xl text-white text-base outline-none focus:ring-2 ring-[#FFCD38] bg-[#1E1B4B] placeholder-white/60"
+        className="bg-transparent border-b border-fuchsia-400 text-white placeholder-white/50 px-2 py-1 text-base focus:outline-none focus:border-yellow-300 transition-all duration-300 mb-3 w-full text-center"
       />
 
-      {player.category && (
-        <p className="mt-4 text-sm bg-gradient-to-r from-[#333] to-[#555] p-2 rounded-md text-center">
-          Selected Category:{" "}
-          <span className="font-semibold text-yellow-300">
+      <p className="text-sm sm:text-base text-white/80">
+        Category:{" "}
+        {player.category ? (
+          <span className="text-yellow-300 font-medium">
             {player.category.name} {player.category.icon}
           </span>
-        </p>
-      )}
+        ) : (
+          <span className="italic text-white/50">Please select a category</span>
+        )}
+      </p>
     </motion.div>
   );
 };
