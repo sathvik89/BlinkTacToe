@@ -6,29 +6,19 @@ import PlayerCard from "../components/PlayerCard";
 import Footer from "../components/Footer";
 import AppMusic from "../components/AppMusic";
 import { PlayerContext } from "../context/PlayerContext";
-import { useContext, useState, useRef, useEffect } from "react";
-import BackButton from "../components/BackButton";
+import { useContext, useState, useRef } from "react";
 import bgImage from "../backgroundImages/background.png";
 import FloatingEmoji from "../components/FloatingEmoji";
 import StartButton from "../components/StartButton";
 import ClickSound from "../audio/Click.mp3";
 import SetupHeading from "../components/SetupHeading";
+import HomeButton from "../components/HomeButton";
 
 const Setup = () => {
   const navi = useNavigate();
   const [player1, setPlayer1] = useState({ name: "", category: null });
   const [player2, setPlayer2] = useState({ name: "", category: null });
   const [eror, setEror] = useState("");
-
-  const emojiSectionRef = useRef(null);
-  const scrollToEmojisSection = () => {
-    emojiSectionRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    const timeout = setTimeout(scrollToEmojisSection, 1500);
-    return () => clearTimeout(timeout);
-  }, []);
 
   const handleSelectCat = (player, category) => {
     if (player === 1) {
@@ -50,26 +40,18 @@ const Setup = () => {
 
   const { setPlayer1Context, setPlayer2Context } = useContext(PlayerContext);
   const clickSound1 = useRef(new Audio(ClickSound));
+
   const handleStart = () => {
     clickSound1.current.currentTime = 0;
     clickSound1.current.play();
-    if (!player1.name.trim()) {
-      return setEror("Please enter Player 1's name.");
-    }
-    if (!player2.name.trim()) {
-      return setEror("Please enter Player 2's name.");
-    }
-    if (!player1.category) {
+    if (!player1.name.trim()) return setEror("Please enter Player 1's name.");
+    if (!player2.name.trim()) return setEror("Please enter Player 2's name.");
+    if (!player1.category)
       return setEror("Player 1, please select an emoji category.");
-    }
-
-    if (!player2.category) {
+    if (!player2.category)
       return setEror("Player 2, please select an emoji category.");
-    }
-
-    if (player1.category.name === player2.category.name) {
+    if (player1.category.name === player2.category.name)
       return setEror("Both players cannot choose the same emoji category.");
-    }
 
     setPlayer1Context(player1);
     setPlayer2Context(player2);
@@ -81,7 +63,8 @@ const Setup = () => {
       style={{ backgroundImage: `url(${bgImage})` }}
       className="relative min-h-screen bg-cover bg-top px-4 md:px-8 py-10 md:py-20 overflow-hidden"
     >
-      <div className="mb-2">
+      <div className="mb-10">
+        <HomeButton />
         <AppMusic />
       </div>
       <div className="relative z-10 max-w-7xl mx-auto">
@@ -107,6 +90,7 @@ const Setup = () => {
               color="#00D2FF"
             />
           </motion.div>
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -117,7 +101,6 @@ const Setup = () => {
           </motion.div>
 
           <motion.div
-            ref={emojiSectionRef}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
@@ -143,6 +126,7 @@ const Setup = () => {
             </div>
           </motion.div>
         </div>
+
         {eror && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -152,38 +136,27 @@ const Setup = () => {
             {eror}
           </motion.div>
         )}
-        <div className="flex justify-between mt-6">
-          <div>
-            <BackButton />
-          </div>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
-            className="mb-12"
-          >
-            <RuleBook />
-          </motion.div>
-        </div>
 
+        {/* RuleBook and Start Button Side-by-Side */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.8, duration: 0.5 }}
-          className="mt-12 flex justify-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
+          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6"
         >
+          <RuleBook />
           <StartButton onClick={handleStart} />
         </motion.div>
-      </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1, duration: 0.6 }}
-        className="mt-24"
-      >
-        <Footer />
-      </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.6 }}
+          className="mt-24"
+        >
+          <Footer />
+        </motion.div>
+      </div>
     </div>
   );
 };

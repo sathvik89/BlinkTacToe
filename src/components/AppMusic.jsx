@@ -12,7 +12,11 @@ const AppMusic = () => {
     const audio = audioRef.current;
     audio.loop = true;
     audio.volume = volume;
-    audio.play();
+
+    audio
+      .play()
+      .then(() => setIsPlaying(true))
+      .catch(() => setIsPlaying(false));
 
     return () => {
       audio.pause();
@@ -23,7 +27,7 @@ const AppMusic = () => {
     audioRef.current.volume = volume;
   }, [volume]);
 
-  const handleToggleControls = () => {
+  const toggleControls = () => {
     setShowControls((prev) => !prev);
   };
 
@@ -35,17 +39,9 @@ const AppMusic = () => {
   };
 
   return (
-    <div className="absolute top-4 right-4 z-50 flex flex-col items-center gap-2">
-      {/* volume button */}
-      <button
-        onClick={handleToggleControls}
-        className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md shadow-md flex items-center justify-center text-white hover:scale-105 transition duration-200"
-      >
-        {getIcon()}
-      </button>
-      {/* volume controller */}
+    <div className="absolute top-4 right-4 z-50 flex items-center gap-2">
       {showControls && (
-        <div className="flex flex-col items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-2 rounded-xl shadow-lg">
+        <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1 rounded-xl shadow-lg transition-all duration-200">
           <input
             type="range"
             min="0"
@@ -53,10 +49,17 @@ const AppMusic = () => {
             step="0.01"
             value={volume}
             onChange={(e) => setVolume(parseFloat(e.target.value))}
-            className="w-28 accent-pink-400"
+            className="w-28 accent-pink-400 cursor-pointer"
           />
         </div>
       )}
+
+      <button
+        onClick={toggleControls}
+        className="w-12 h-12 rounded-full border border-purple-300/60 bg-white/10 backdrop-blur-md shadow-md flex items-center justify-center text-white hover:scale-105 transition duration-200"
+      >
+        {getIcon()}
+      </button>
     </div>
   );
 };

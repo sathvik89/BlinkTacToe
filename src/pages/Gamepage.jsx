@@ -14,6 +14,7 @@ import bgImage from "../backgroundImages/background.png";
 import clickSound from "../audio/Click.mp3";
 import AppMusic from "../components/AppMusic";
 import winnerSound from "../audio/winner.mp3";
+import HomeButton from "../components/HomeButton";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30, scale: 0.95 },
@@ -138,6 +139,7 @@ const Gamepage = () => {
       }}
     >
       <AppMusic />
+      <HomeButton />
       {showConfetti && <Confetti />}
       <div className="flex-1 p-4 md:p-8">
         <motion.div className="max-w-4xl mx-auto" variants={fadeUp}>

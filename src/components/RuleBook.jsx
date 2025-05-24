@@ -40,7 +40,7 @@ const RuleBook = () => {
             playClick();
             setShow(true);
           }}
-          className="px-5 py-2 rounded-xl font-semibold bg-[#6C5CE7] text-white hover:bg-[#8E44AD] hover:scale-105 transition-all shadow-md"
+          className="px-6 py-3 cursor-pointer rounded-xl font-semibold bg-[#6C5CE7] text-white hover:bg-[#8E44AD] hover:scale-105 transition-all shadow-md"
         >
           Show Rules
         </button>
