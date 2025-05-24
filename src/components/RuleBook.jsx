@@ -1,16 +1,22 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ClickSound from "../audio/Click.mp3";
 
 const RuleBook = () => {
+  const clickSound1 = useRef(new Audio(ClickSound));
   const [show, setShow] = useState(false);
-  const modalRef = useRef();
+  const rulesRef = useRef();
 
-  const closeModal = () => setShow(false);
+  function closeRules() {
+    clickSound1.current.currentTime = 0;
+    clickSound1.current.play();
+    setShow(false);
+  }
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (modalRef.current && !modalRef.current.contains(e.target)) {
-        closeModal();
+      if (rulesRef.current && !rulesRef.current.contains(e.target)) {
+        closeRules();
       }
     };
     if (show) {
@@ -19,6 +25,7 @@ const RuleBook = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [show]);
 
+  //layout
   const Section = ({ number, color, title, children }) => (
     <div className="mt-6">
       <div className="flex items-center gap-3">
@@ -35,6 +42,12 @@ const RuleBook = () => {
     </div>
   );
 
+  function openRules() {
+    clickSound1.current.currentTime = 0;
+    clickSound1.current.play();
+    setShow(true);
+  }
+
   return (
     <>
       <div
@@ -43,8 +56,8 @@ const RuleBook = () => {
         }`}
       >
         <button
-          onClick={() => setShow(true)}
-          className="px-5 py-2 rounded-2xl font-semibold bg-teal-500 hover:scale-105 shadow-md hover:shadow-lg transition-all duration-300"
+          onClick={openRules}
+          className="px-5 py-2 cursor-pointer rounded-2xl font-semibold bg-teal-500 hover:scale-105 shadow-md hover:shadow-lg transition-all duration-300"
         >
           Show Rules
         </button>
@@ -59,7 +72,7 @@ const RuleBook = () => {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              ref={modalRef}
+              ref={rulesRef}
               className="relative w-full max-w-xl mx-4 p-6 rounded-2xl border border-white/10 bg-white/10 shadow-xl backdrop-blur-xl text-white"
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -67,8 +80,8 @@ const RuleBook = () => {
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
             >
               <button
-                onClick={closeModal}
-                className="absolute top-3 right-3 text-white text-lg hover:text-red-400 transition"
+                onClick={closeRules}
+                className="absolute top-3 cursor-pointer right-3 text-white text-lg hover:text-red-400 transition"
               >
                 ❌
               </button>

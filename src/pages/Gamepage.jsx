@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { PlayerContext } from "../context/PlayerContext";
 import Confetti from "../components/gamepageComponents/Confetti";
@@ -11,6 +11,8 @@ import Board from "../components/gamepageComponents/Board";
 import GameControls from "../components/gamepageComponents/GameControls";
 import Footer from "../components/Footer";
 import bgImage from "../backgroundImages/background.png";
+import clickSound from "../audio/Click.mp3";
+import AppMusic from "../components/AppMusic";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30, scale: 0.95 },
@@ -27,6 +29,7 @@ const fadeUp = {
 };
 
 const Gamepage = () => {
+  const clickSound1 = useRef(new Audio(clickSound));
   const { player1, player2, currentEmojisetToPlace, resetEmojiSet } =
     useContext(PlayerContext);
   const navi = useNavigate();
@@ -48,7 +51,10 @@ const Gamepage = () => {
 
   //cell logic
   const handleCellClick = (index) => {
-    if (winner || board[index] !== null) return;
+    clickSound1.current.currentTime = 0;
+    clickSound1.current.play();
+
+    if (winner || board[index] !== null) return null;
 
     const newBoard = [...board];
     const isPlayer1Turn = currentTurn === 1;
@@ -93,6 +99,8 @@ const Gamepage = () => {
   //cell logic ends here //
 
   function handleResetGame() {
+    clickSound1.current.currentTime = 0;
+    clickSound1.current.play();
     setBoard(Array(9).fill(null));
     setPlayer1Moves([]);
     setPlayer2Moves([]);
@@ -117,6 +125,7 @@ const Gamepage = () => {
         visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
       }}
     >
+      <AppMusic />
       {showConfetti && <Confetti />}
       <div className="flex-1 p-4 md:p-8">
         <motion.div className="max-w-4xl mx-auto" variants={fadeUp}>
@@ -161,14 +170,18 @@ const Gamepage = () => {
           <motion.div variants={fadeUp}>
             <GameControls
               handleReset={handleResetGame}
-              handleChangePlayers={() => navi("/setup")}
+              handleChangePlayers={() => {
+                clickSound1.current.currentTime = 0;
+                clickSound1.current.play();
+                navi("/setup");
+              }}
               isWin={winner}
             />
           </motion.div>
 
           <motion.div
             variants={fadeUp}
-            className="mt-8 mb-8 text-center text-sm text-black"
+            className="mt-8 mb-8 text-center text-sm text-yellow-300"
           >
             <p>Remember: You can only have 3 emojis on the board at once!</p>
             <p>When you place a 4th emoji, your oldest one will vanish.</p>
