@@ -1,8 +1,9 @@
 import React from "react";
 import Heading from "../components/Heading";
 import Button from "../components/Button";
-// import Footer from "../components/Footer";
+import bgImage from "../backgroundImages/background.png";
 import { motion } from "framer-motion";
+import FloatingEmoji from "../components/FloatingEmoji";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -32,51 +33,17 @@ const itemVariants = {
   },
 };
 
-const emojiVariants = {
-  animate: {
-    y: [-10, -14, -10],
-    rotate: [-5, 5, -5],
-    opacity: [0.2, 0.6, 0.2],
-    transition: {
-      duration: 6,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  },
-};
-
 const LandingPage = () => {
   return (
     <motion.div
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="relative flex flex-col justify-center items-center min-h-screen bg-[#0F172A] text-white px-4 py-10 sm:px-6 md:px-10 overflow-hidden"
+      style={{ backgroundImage: `url(${bgImage})` }}
+      className="relative flex flex-col justify-center items-center min-h-screen bg-cover bg-top px-4 md:px-8 py-10 md:py-20 overflow-hidden"
+      // className="relative  min-h-screen bg-[#0F172A] text-white px-4 py-10 sm:px-6 md:px-10 overflow-hidden"
     >
-      {/* Floating Emojis */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(10)].map((_, i) => (
-          <motion.span
-            key={i}
-            className="absolute select-none"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              fontSize: `${Math.random() * 18 + 24}px`,
-              opacity: 0.2,
-            }}
-            variants={emojiVariants}
-            animate="animate"
-          >
-            {
-              ["😄", "🎮", "✨", "🦄", "🎲", "🎯", "🚀", "👻", "🌟", "💡"][
-                i % 10
-              ]
-            }
-          </motion.span>
-        ))}
-      </div>
-
+      <FloatingEmoji />
       <motion.div variants={itemVariants} className="z-10 mt-6 text-center">
         <Heading text="Blink Tac Toe" />
       </motion.div>

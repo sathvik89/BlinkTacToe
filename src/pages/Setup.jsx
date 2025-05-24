@@ -8,6 +8,7 @@ import { PlayerContext } from "../context/PlayerContext";
 import { useContext, useState, useRef, useEffect } from "react";
 import BackButton from "../components/BackButton";
 import bgImage from "../backgroundImages/background.png";
+import FloatingEmoji from "../components/FloatingEmoji";
 
 const Setup = () => {
   const navi = useNavigate();
@@ -43,32 +44,25 @@ const Setup = () => {
     }
   };
 
-  const canStart =
-    player1.name &&
-    player2.name &&
-    player1.category &&
-    player2.category &&
-    player1.category.name !== player2.category.name;
-
   const { setPlayer1Context, setPlayer2Context } = useContext(PlayerContext);
 
   const handleStart = () => {
     if (!player1.name.trim()) {
-      return setEror("Player 1 name is required!");
+      return setEror("Please enter Player 1's name.");
     }
     if (!player2.name.trim()) {
-      return setEror("Player 2 name is required!");
+      return setEror("Please enter Player 2's name.");
     }
     if (!player1.category) {
-      return setEror("Player 1 must select an emoji category!");
+      return setEror("Player 1, please select an emoji category.");
     }
 
     if (!player2.category) {
-      return setEror("Player 2 must select an emoji category!");
+      return setEror("Player 2, please select an emoji category.");
     }
 
     if (player1.category.name === player2.category.name) {
-      return setEror("Both players cannot select the same emoji category!");
+      return setEror("Both players cannot choose the same emoji category.");
     }
 
     setPlayer1Context(player1);
@@ -90,6 +84,7 @@ const Setup = () => {
         >
           Setup Your Game
         </motion.h1>
+        <FloatingEmoji />
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -137,16 +132,6 @@ const Setup = () => {
             />
           </div>
         </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.6, duration: 0.6 }}
-          className="mb-12"
-        >
-          <RuleBook />
-        </motion.div>
-
         {eror && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -156,9 +141,18 @@ const Setup = () => {
             {eror}
           </motion.div>
         )}
-
-        <div className="mt-6">
-          <BackButton />
+        <div className="flex justify-between mt-6">
+          <div>
+            <BackButton />
+          </div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="mb-12"
+          >
+            <RuleBook />
+          </motion.div>
         </div>
 
         <motion.div
@@ -169,12 +163,7 @@ const Setup = () => {
         >
           <button
             onClick={handleStart}
-            disabled={!canStart}
-            className={`px-10 py-3 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg tracking-wide ${
-              canStart
-                ? "bg-emerald-400 hover:scale-105 cursor-pointer"
-                : "bg-gray-600 cursor-not-allowed opacity-60"
-            }`}
+            className={`px-10 py-3 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg tracking-wide ${"bg-emerald-400 hover:scale-105 cursor-pointer"}`}
           >
             Start Game!
           </button>

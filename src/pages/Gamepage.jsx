@@ -31,7 +31,9 @@ const Gamepage = () => {
     useContext(PlayerContext);
   const navi = useNavigate();
   const [board, setBoard] = useState(Array(9).fill(null));
-  const [currentTurn, setCurrentTurn] = useState(1);
+  const [currentTurn, setCurrentTurn] = useState(
+    Math.floor(Math.random() * 2) + 1
+  );
   const [player1Moves, setPlayer1Moves] = useState([]);
   const [player2Moves, setPlayer2Moves] = useState([]);
   const [winner, setWinner] = useState(null);
@@ -108,7 +110,6 @@ const Gamepage = () => {
     <motion.div
       style={{ backgroundImage: `url(${bgImage})` }}
       className="relative min-h-screen bg-cover bg-top px-4 md:px-8 py-10 md:py-20 overflow-hidden"
-      // className="min-h-screen bg-gradient-to-b from-[#2C2C54] to-[#1F1F3A] text-white flex flex-col"
       initial="hidden"
       animate="visible"
       variants={{
@@ -161,12 +162,13 @@ const Gamepage = () => {
             <GameControls
               handleReset={handleResetGame}
               handleChangePlayers={() => navi("/setup")}
+              isWin={winner}
             />
           </motion.div>
 
           <motion.div
             variants={fadeUp}
-            className="mt-8 mb-8 text-center text-sm text-gray-400"
+            className="mt-8 mb-8 text-center text-sm text-black"
           >
             <p>Remember: You can only have 3 emojis on the board at once!</p>
             <p>When you place a 4th emoji, your oldest one will vanish.</p>
