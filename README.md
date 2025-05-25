@@ -10,7 +10,7 @@ Try the game live here: https://blink-tac-toe-seven.vercel.app
 
 ---
 
-## ⚙️ Tech Stack
+## Tech Stack
 
 - **React.js** (with Hooks and Context API for global state)
 - **Tailwind CSS** for styling
