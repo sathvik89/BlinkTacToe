@@ -4,6 +4,12 @@ A playful, emoji-powered twist on classic Tic Tac Toe – built with React, feat
 
 ---
 
+## Live Demo
+
+Try the game live here: https://blink-tac-toe-seven.vercel.app
+
+---
+
 ## ⚙️ Tech Stack
 
 - **React.js** (with Hooks and Context API for global state)
