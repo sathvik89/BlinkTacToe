@@ -1,26 +1,43 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const PlayerBadge = ({ player, isActive, score }) => {
+const PlayerBadge = ({
+  player,
+  isActive,
+  score,
+  currentRound,
+  totalRounds,
+}) => {
+  const isMultiRound = totalRounds > 1;
+
   return (
     <motion.div
-      className={`flex items-center gap-3 px-4 py-2 rounded-xl shadow-lg transition-all duration-300 
-        ${isActive ? "bg-yellow-300 text-black" : "bg-white/10 text-white"}`}
+      className={`px-4 py-3 rounded-xl shadow-md transition-all duration-300 w-full 
+        ${isActive ? "bg-yellow-300 text-gray-900" : "bg-blue-900 text-white"}`}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <div className="text-2xl">{player.category?.icon}</div>
-
-      <div>
-        <p className="text-sm font-bold">{player.name}</p>
-        {typeof score === "number" && (
-          <p className="text-xs text-white/70">Score: {score}</p>
-        )}
+      {/* player inf */}
+      <div className="flex items-center gap-3">
+        <div className="text-3xl">{player.category?.icon}</div>
+        <div>
+          <p className="text-base font-bold">{player.name}</p>
+          <p className="text-sm">
+            Score: {score} / {totalRounds}
+          </p>
+        </div>
       </div>
-
+      {/* showing whose active and who is not  */}
       {isActive && (
-        <div className="ml-auto text-xs font-semibold bg-black/30 px-2 py-1 rounded">
-          Your Turn
+        <div className="mt-2 flex justify-between items-center text-sm">
+          <span className="bg-white text-blue-900 px-2 py-0.5 rounded">
+            Your Turn
+          </span>
+          {isMultiRound && (
+            <span className="text-white/80">
+              Round {currentRound} / {totalRounds}
+            </span>
+          )}
         </div>
       )}
     </motion.div>

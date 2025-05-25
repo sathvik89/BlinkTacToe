@@ -30,8 +30,18 @@ const Gamepage = () => {
   const navi = useNavigate();
 
   // context
-  const { player1, player2, currentEmojisetToPlace, resetEmojiSet } =
-    useContext(PlayerContext);
+  const {
+    player1,
+    player2,
+    currentEmojisetToPlace,
+    resetEmojiSet,
+    scores,
+    incrementScore,
+    rounds,
+    currentRound,
+    nextRound,
+    resetGame,
+  } = useContext(PlayerContext);
 
   //game states
   const [board, setBoard] = useState(Array(9).fill(null));
@@ -43,6 +53,7 @@ const Gamepage = () => {
   const [winner, setWinner] = useState(null);
   const [winningCells, setWinningCells] = useState([]);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [gameCompleted, setGameCompleted] = useState(false);
 
   //redirect to setup if players category not set
   useEffect(() => {
@@ -55,15 +66,14 @@ const Gamepage = () => {
   const handleCellClick = (index) => {
     clickSound1.current.currentTime = 0;
     clickSound1.current.play();
-
     // if a winner is declared or the cell is already filled (not null), do nothing
-    if (winner || board[index] !== null) return null;
+    if (winner || board[index] !== null || gameCompleted) return null;
 
     const newBoard = [...board]; // temporary board — later we’ll update the actual board
     const isPlayer1Turn = currentTurn === 1; // check whose turn it is
     const playerMoves = isPlayer1Turn ? player1Moves : player2Moves;
     const setPlayerMoves = isPlayer1Turn ? setPlayer1Moves : setPlayer2Moves;
-    const currentEmoji = currentEmojisetToPlace[currentTurn]; // from context currentEmojisetToPlace = { 1: emoji1, 2: emoji2 }
+    const currentEmoji = currentEmojisetToPlace[currentTurn]; // from context currentEmojisetToPlace = { 1: emoji1, 2: emoji2 } so the current emoji is chosen currentEmojisetToPlace[currentTurn (1 or 2)]
 
     const newMove = {
       emoji: currentEmoji,
@@ -72,7 +82,7 @@ const Gamepage = () => {
       player: currentTurn,
     };
 
-    const updatedMoves = updateMovesWithLimit(playerMoves, newMove, newBoard);
+    const updatedMoves = updateMovesWithLimit(playerMoves, newMove, newBoard); //handles the logic for vanishing the oldest emoji when put 4th emoji
     newBoard[index] = newMove;
     setBoard(newBoard);
     setPlayerMoves(updatedMoves);
@@ -82,29 +92,44 @@ const Gamepage = () => {
       setWinner(currentTurn);
       setWinningCells(result.winningIndices);
       setShowConfetti(true);
+      incrementScore(currentTurn);
+
+      // checking if all rounds are completed or not
+      if (currentRound >= rounds) {
+        setGameCompleted(true);
+      }
       return;
     } else {
       setCurrentTurn(currentTurn === 1 ? 2 : 1);
       resetEmojiSet(); // resetting the emoji after every move
     }
   };
+
   //cell Logic ends here
 
   // reset everything to initial states
   const handleResetGame = () => {
     clickSound1.current.currentTime = 0;
     clickSound1.current.play();
+
     setBoard(Array(9).fill(null));
     setPlayer1Moves([]);
     setPlayer2Moves([]);
     setWinner(null);
     setWinningCells([]);
-    setCurrentTurn(1);
+    setCurrentTurn(Math.floor(Math.random() * 2) + 1);
     setShowConfetti(false);
     resetEmojiSet();
+
+    if (currentRound < rounds) {
+      nextRound();
+    } else {
+      resetGame();
+      setGameCompleted(false);
+    }
   };
 
-  //if theres a winner play winner sound for 5sec
+  //if theres a winner, play winner sound for 5sec
   useEffect(() => {
     if (winner) {
       winnerMusicc.current.currentTime = 0;
@@ -149,7 +174,10 @@ const Gamepage = () => {
           >
             <PlayerBadge
               player={player1}
-              isActive={currentTurn === 1 && !winner}
+              isActive={currentTurn === 1 && !winner && !gameCompleted}
+              score={scores[1]}
+              currentRound={currentRound}
+              totalRounds={rounds}
             />
 
             <motion.div variants={fadeUp}>
@@ -159,12 +187,17 @@ const Gamepage = () => {
                 player1={player1}
                 player2={player2}
                 currentEmoji={currentEmojisetToPlace[currentTurn]}
+                gameCompleted={gameCompleted}
+                scores={scores}
               />
             </motion.div>
 
             <PlayerBadge
               player={player2}
-              isActive={currentTurn === 2 && !winner}
+              isActive={currentTurn === 2 && !winner && !gameCompleted}
+              score={scores[2]}
+              currentRound={currentRound}
+              totalRounds={rounds}
             />
           </motion.div>
 
@@ -188,9 +221,11 @@ const Gamepage = () => {
                 navi("/setup");
               }}
               isWin={winner}
+              gameCompleted={gameCompleted}
             />
           </motion.div>
 
+          {/* Game instructions */}
           <motion.div
             variants={fadeUp}
             className="mt-8 mb-8 text-center text-sm text-yellow-300"

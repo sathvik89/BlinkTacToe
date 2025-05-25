@@ -7,6 +7,8 @@ const PlayerTurnIndicator = ({
   player1,
   player2,
   currentEmoji,
+  gameCompleted,
+  scores,
 }) => {
   return (
     <motion.div
@@ -14,13 +16,34 @@ const PlayerTurnIndicator = ({
       animate={{ opacity: 1, y: 0 }}
       className="bg-[#3D3D6B] p-4 rounded-xl text-center flex flex-col justify-center"
     >
-      {winner ? (
+      {gameCompleted ? (
         <div className="p-6 rounded-xl bg-blue-200 backdrop-blur-sm border border-gray-700 flex flex-col items-center text-center gap-4 shadow-lg">
           <h2 className="text-gray-900 font-extrabold text-lg">
-            {winner === 1 ? player1.name : player2.name} Wins!
+            {scores[1] > scores[2]
+              ? `${player1.name} Wins the Game!`
+              : scores[2] > scores[1]
+              ? `${player2.name} Wins the Game!`
+              : "It's a Draw!"}
           </h2>
-
           <div className="text-5xl text-pink-400 animate-bounce">🏆</div>
+          <div className="text-sm text-gray-700">
+            Final Score: {player1.name} {scores[1]} - {scores[2]} {player2.name}
+          </div>
+        </div>
+      ) : winner ? (
+        // This round's winner
+
+        <div className="p-6 rounded-xl bg-blue-200 backdrop-blur-sm border border-gray-700 flex flex-col items-center text-center gap-4 shadow-lg">
+          <h2 className="text-gray-900 font-extrabold text-lg">
+            {winner === 1 ? player1.name : player2.name} Wins This Round!
+          </h2>
+          <div className="text-5xl text-pink-400 animate-bounce">🎉</div>
+          {scores[1] !== 0 || scores[2] !== 0 ? (
+            <div className="text-sm text-gray-700">
+              Current Score: {player1.name} {scores[1]} - {scores[2]}{" "}
+              {player2.name}
+            </div>
+          ) : null}
         </div>
       ) : (
         <>

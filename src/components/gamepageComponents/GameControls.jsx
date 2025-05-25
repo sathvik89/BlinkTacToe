@@ -1,30 +1,27 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+import React from "react";
 
-const GameControls = ({ handleReset, handleChangePlayers, isWin }) => {
+const GameControls = ({
+  handleReset,
+  handleChangePlayers,
+  isWin,
+  gameCompleted,
+}) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4 }}
-      className="flex justify-center gap-4"
-    >
-      {isWin && (
-        <button
-          onClick={handleReset}
-          className="cursor-pointer px-6 py-3 bg-[#4CAF50] text-white rounded-xl font-medium hover:bg-[#8BC34A] transition-colors"
-        >
-          Play Again
-        </button>
-      )}
-
+    <div className="flex justify-center gap-4 mt-6">
       <button
         onClick={handleChangePlayers}
-        className="px-6 cursor-pointer py-3 bg-[#2196F3] text-white rounded-xl font-medium hover:bg-[#1E88E5] transition-colors"
+        className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
       >
         Change Players
       </button>
-    </motion.div>
+
+      <button
+        onClick={handleReset}
+        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+      >
+        {gameCompleted ? "Play Again" : isWin ? "Next Round" : "Reset Game"}
+      </button>
+    </div>
   );
 };
 
