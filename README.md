@@ -19,7 +19,7 @@ Try the game live here: https://blink-tac-toe-seven.vercel.app
 
 ---
 
-## 😍 Emoji Categories
+## Emoji Categories
 
 Players can choose from the following emoji categories:
 
@@ -36,7 +36,7 @@ Players can choose from the following emoji categories:
 
 ---
 
-## ✨ Vanishing Feature (Move Limit)
+## Vanishing Feature (Move Limit)
 
 To implement the vanishing feature, that each player can only have up to 3 emojis on the board at a time. When a player makes a move beyond this limit, the oldest move they made automatically disappears.
 
@@ -91,4 +91,5 @@ I went beyond the basic requirements by adding:
 
 ---
 
-**Thanks for the opportunity to build something like BlinkTacToe — I'm excited to hear your feedback!**
+> **Thanks for the opportunity to build something like BlinkTacToe — I'm excited to hear your feedback!**
+
