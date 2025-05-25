@@ -4,34 +4,10 @@ import Button from "../components/Button";
 import bgImage from "../backgroundImages/background.png";
 import { motion } from "framer-motion";
 import FloatingEmoji from "../components/FloatingEmoji";
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      when: "beforeChildren",
-      staggerChildren: 0.25,
-      duration: 0.8,
-      ease: "easeOut",
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 60, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      type: "spring",
-      stiffness: 80,
-      damping: 12,
-      mass: 0.8,
-    },
-  },
-};
+import {
+  containerVariants,
+  itemVariants,
+} from "../animationsFramer/landingVariants";
 
 const LandingPage = () => {
   return (
@@ -41,8 +17,8 @@ const LandingPage = () => {
       animate="visible"
       style={{ backgroundImage: `url(${bgImage})` }}
       className="relative flex flex-col justify-center items-center min-h-screen bg-cover bg-top px-4 md:px-8 py-10 md:py-20 overflow-hidden"
-      // className="relative  min-h-screen bg-[#0F172A] text-white px-4 py-10 sm:px-6 md:px-10 overflow-hidden"
     >
+      {/* floating emoji effect in bg */}
       <FloatingEmoji />
       <motion.div variants={itemVariants} className="z-10 mt-6 text-center">
         <Heading text="Blink Tac Toe" />

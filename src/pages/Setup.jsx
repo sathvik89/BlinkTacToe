@@ -19,7 +19,9 @@ const Setup = () => {
   const [player1, setPlayer1] = useState({ name: "", category: null });
   const [player2, setPlayer2] = useState({ name: "", category: null });
   const [eror, setEror] = useState("");
+  const errorRef = useRef();
 
+  // setting the categories for players
   const handleSelectCat = (player, category) => {
     if (player === 1) {
       setPlayer1({ ...player1, category });
@@ -42,8 +44,11 @@ const Setup = () => {
   const clickSound1 = useRef(new Audio(ClickSound));
 
   const handleStart = () => {
+    // sound effect
     clickSound1.current.currentTime = 0;
     clickSound1.current.play();
+
+    //posssible errors setup
     if (!player1.name.trim()) return setEror("Please enter Player 1's name.");
     if (!player2.name.trim()) return setEror("Please enter Player 2's name.");
     if (!player1.category)
@@ -52,7 +57,9 @@ const Setup = () => {
       return setEror("Player 2, please select an emoji category.");
     if (player1.category.name === player2.category.name)
       return setEror("Both players cannot choose the same emoji category.");
+    errorRef.current?.scrollIntoView({ behavior: "smooth" }); //scrolling to error 
 
+    // setting the player context
     setPlayer1Context(player1);
     setPlayer2Context(player2);
     navi("/gamepage");
@@ -70,7 +77,9 @@ const Setup = () => {
       <div className="relative z-10 max-w-7xl mx-auto">
         <SetupHeading />
         <FloatingEmoji />
+
         <div className="flex flex-col justify-center">
+          {/* player cards (eg: enter your name ) */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -95,13 +104,14 @@ const Setup = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
-            className="text-white text-center text-lg font-semibold my-6 bg-black/30 backdrop-blur-md px-6 py-3 rounded-full w-max mx-auto shadow-lg shadow-black/50 select-none"
+            className="text-white text-center text-lg font-semibold my-6 bg-black/30 backdrop-blur-md px-6 py-3 rounded-full w-max mx-auto  select-none"
             role="banner"
             aria-label="Instruction to choose emoji sets"
           >
             Choose your emoji sets
           </motion.div>
 
+          {/* emoji category section */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -142,6 +152,7 @@ const Setup = () => {
           </motion.div>
         </div>
 
+        {/* error displayed if any when clicked on start */}
         {eror && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
