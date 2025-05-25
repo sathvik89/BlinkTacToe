@@ -57,7 +57,7 @@ const Setup = () => {
       return setEror("Player 2, please select an emoji category.");
     if (player1.category.name === player2.category.name)
       return setEror("Both players cannot choose the same emoji category.");
-    errorRef.current?.scrollIntoView({ behavior: "smooth" }); //scrolling to error 
+    errorRef.current?.scrollIntoView({ behavior: "smooth" }); //scrolling to error
 
     // setting the player context
     setPlayer1Context(player1);
@@ -155,6 +155,7 @@ const Setup = () => {
         {/* error displayed if any when clicked on start */}
         {eror && (
           <motion.div
+            ref={errorRef}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             className="mt-6 p-4 bg-red-600/20 border border-red-400 text-red-100 rounded-lg text-center font-semibold shadow-inner"

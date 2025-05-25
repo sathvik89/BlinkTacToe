@@ -1,40 +1,39 @@
 import { motion } from "framer-motion";
 import { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+
+// context and utility functions imports
 import { PlayerContext } from "../context/PlayerContext";
+import { checkWinner } from "../utils/IsWinner";
+import { updateMovesWithLimit } from "../utils/updateMovesWithLimit";
+import { fadeUp } from "../animationsFramer/GamePageVariants";
+
+// components imports
+import AppMusic from "../components/AppMusic";
+import HomeButton from "../components/HomeButton";
 import Confetti from "../components/gamepageComponents/Confetti";
 import GameSubHead from "../components/gamepageComponents/GameSubHead";
 import PlayerBadge from "../components/gamepageComponents/PlayerBadge";
 import PlayerTurnIndicator from "../components/gamepageComponents/PlayerTurnIndicator";
-import { checkWinner } from "../utils/IsWinner";
 import Board from "../components/gamepageComponents/Board";
 import GameControls from "../components/gamepageComponents/GameControls";
 import Footer from "../components/Footer";
-import bgImage from "../backgroundImages/background.png";
-import clickSound from "../audio/Click.mp3";
-import AppMusic from "../components/AppMusic";
-import winnerSound from "../audio/winner.mp3";
-import HomeButton from "../components/HomeButton";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 30, scale: 0.95 },
-  visible: (i = 1) => ({
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      delay: i * 0.15,
-      duration: 0.5,
-      ease: [0.17, 0.67, 0.83, 0.67],
-    },
-  }),
-};
+// audio backgrounds imports
+import clickSound from "../audio/Click.mp3";
+import winnerSound from "../audio/winner.mp3";
+import bgImage from "../backgroundImages/background.png";
 
 const Gamepage = () => {
   const clickSound1 = useRef(new Audio(clickSound));
+  const winnerMusicc = useRef(new Audio(winnerSound));
+  const navi = useNavigate();
+
+  // context
   const { player1, player2, currentEmojisetToPlace, resetEmojiSet } =
     useContext(PlayerContext);
-  const navi = useNavigate();
+
+  //game states
   const [board, setBoard] = useState(Array(9).fill(null));
   const [currentTurn, setCurrentTurn] = useState(
     Math.floor(Math.random() * 2) + 1
@@ -45,60 +44,40 @@ const Gamepage = () => {
   const [winningCells, setWinningCells] = useState([]);
   const [showConfetti, setShowConfetti] = useState(false);
 
-  const winnerMusicc = useRef(new Audio(winnerSound));
-  useEffect(() => {
-    if (winner) {
-      winnerMusicc.current.currentTime = 0;
-      winnerMusicc.current.play();
-      const id = setTimeout(() => {
-        winnerMusicc.current.pause();
-      }, 5000);
-      return () => clearTimeout(id);
-    }
-  }, [winner]);
+  //redirect to setup if players category not set
   useEffect(() => {
     if (!player1?.category || !player2?.category) {
       navi("/setup");
     }
   }, [player1, player2, navi]);
 
-  //cell logic
+  // cell Logic Starts
   const handleCellClick = (index) => {
     clickSound1.current.currentTime = 0;
     clickSound1.current.play();
 
+    // if a winner is declared or the cell is already filled (not null), do nothing
     if (winner || board[index] !== null) return null;
 
-    const newBoard = [...board];
-    const isPlayer1Turn = currentTurn === 1;
+    const newBoard = [...board]; // temporary board — later we’ll update the actual board
+    const isPlayer1Turn = currentTurn === 1; // check whose turn it is
     const playerMoves = isPlayer1Turn ? player1Moves : player2Moves;
     const setPlayerMoves = isPlayer1Turn ? setPlayer1Moves : setPlayer2Moves;
-    const currentEmoji = currentEmojisetToPlace[currentTurn];
+    const currentEmoji = currentEmojisetToPlace[currentTurn]; // from context currentEmojisetToPlace = { 1: emoji1, 2: emoji2 }
 
     const newMove = {
       emoji: currentEmoji,
       position: index,
-      timestamp: Date.now(),
+      timestamp: Date.now(), // adding timestamp to track which move is oldest , this helps us remove the oldest when placing a 4th emoji
       player: currentTurn,
     };
 
-    let updatedMoves;
-    if (playerMoves.length >= 3) {
-      const sortedMoves = [...playerMoves].sort(
-        (a, b) => a.timestamp - b.timestamp
-      );
-      const oldestMove = sortedMoves[0];
-      newBoard[oldestMove.position] = null;
-      updatedMoves = [...playerMoves.slice(1), newMove];
-    } else {
-      updatedMoves = [...playerMoves, newMove];
-    }
-
+    const updatedMoves = updateMovesWithLimit(playerMoves, newMove, newBoard);
     newBoard[index] = newMove;
     setBoard(newBoard);
     setPlayerMoves(updatedMoves);
 
-    const result = checkWinner(updatedMoves);
+    const result = checkWinner(updatedMoves); // check if the updated moves form a winning combination or not
     if (result.isWinner) {
       setWinner(currentTurn);
       setWinningCells(result.winningIndices);
@@ -106,12 +85,13 @@ const Gamepage = () => {
       return;
     } else {
       setCurrentTurn(currentTurn === 1 ? 2 : 1);
-      resetEmojiSet();
+      resetEmojiSet(); // resetting the emoji after every move
     }
   };
-  //cell logic ends here //
+  //cell Logic ends here
 
-  function handleResetGame() {
+  // reset everything to initial states
+  const handleResetGame = () => {
     clickSound1.current.currentTime = 0;
     clickSound1.current.play();
     setBoard(Array(9).fill(null));
@@ -122,10 +102,21 @@ const Gamepage = () => {
     setCurrentTurn(1);
     setShowConfetti(false);
     resetEmojiSet();
-  }
-  if (!player1 || !player2) {
-    return null;
-  }
+  };
+
+  //if theres a winner play winner sound for 5sec
+  useEffect(() => {
+    if (winner) {
+      winnerMusicc.current.currentTime = 0;
+      winnerMusicc.current.play();
+      const id = setTimeout(() => {
+        winnerMusicc.current.pause();
+      }, 5000);
+      return () => clearTimeout(id);
+    }
+  }, [winner]);
+
+  if (!player1 || !player2) return null;
 
   return (
     <motion.div
@@ -142,13 +133,16 @@ const Gamepage = () => {
         <AppMusic />
         <HomeButton />
       </div>
+
       {showConfetti && <Confetti />}
+
       <div className="flex-1 p-4 md:p-8">
         <motion.div className="max-w-4xl mx-auto" variants={fadeUp}>
           <motion.div variants={fadeUp}>
             <GameSubHead />
           </motion.div>
 
+          {/* player badge1 - player turn indicator - player badge2 */}
           <motion.div
             className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"
             variants={fadeUp}
@@ -174,6 +168,7 @@ const Gamepage = () => {
             />
           </motion.div>
 
+          {/* board */}
           <motion.div variants={fadeUp}>
             <Board
               board={board}
@@ -183,6 +178,7 @@ const Gamepage = () => {
             />
           </motion.div>
 
+          {/* game controls */}
           <motion.div variants={fadeUp}>
             <GameControls
               handleReset={handleResetGame}
